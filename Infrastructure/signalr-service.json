@@ -1,0 +1,68 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "skuName": {
+      "type": "string",
+      "allowedValues": [
+        "Free_F1",
+        "Standard_S1"
+      ]
+    },
+    "tier": {
+      "type": "string",
+      "allowedValues": [
+        "Free",
+        "Standard",
+        "Premium"
+      ]
+    },
+    "capacity": {
+      "type": "int"
+    },
+    "serviceMode": {
+      "type": "string",
+      "defaultValue": "Default",
+      "allowedValues": [
+        "Default",
+        "Serverless",
+        "Classic",
+        "PredefinedOnly"
+      ]
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.SignalRService/SignalR",
+      "name": "[parameters('name')]",
+      "apiVersion": "2018-10-01",
+      "location": "[parameters('location')]",
+      "properties": {
+        "hostNamePrefix": "[parameters('name')]",
+        "features": [
+          {
+            "flag": "ServiceMode",
+            "value": "[parameters('serviceMode')]"
+          }
+        ]
+      },
+      "sku": {
+        "name": "[parameters('skuName')]",
+        "tier": "[parameters('tier')]",
+        "capacity": "[parameters('capacity')]"
+      }
+    }
+  ],
+  "outputs": {
+    "SignalRAccessKey": {
+      "type": "string",
+      "value": "[listKeys(resourceId('Microsoft.SignalRService/SignalR', parameters('name')), providers('Microsoft.SignalRService','SignalR').apiVersions[0]).primaryKey]"
+    }
+  }
+}

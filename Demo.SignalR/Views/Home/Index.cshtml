@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Live Stream";
+}
+<h1>@ViewData["Title"]</h1>
+@section Scripts
+{
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script src="@Url.Content("~/js/telemetry-stream-vm.js")"></script>
+    <script>
+        ko.applyBindings(new ViewModel());
+    </script>
+}
+
+<div style="padding-top: 25px;" class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">assetid</th>
+                <th scope="col">displayName</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: telemetry()">
+            <tr>
+
+                <td data-bind="text: id"></td>
+                <td data-bind="text: assetId"></td>
+                <td data-bind="text: displayName"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
